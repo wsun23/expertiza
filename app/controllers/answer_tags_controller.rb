@@ -7,7 +7,18 @@ class AnswerTagsController < ApplicationController
   def action_allowed?
     case params[:action]
     when 'index', 'create_edit'
+<<<<<<< HEAD
       current_user_has_student_privileges?
+=======
+      ['Instructor',
+       'Teaching Assistant',
+       'Student',
+       'Administrator'].include? current_role_name
+    when 'machine_tagging'
+      ['Instructor',
+       'Teaching Assistant',
+       'Administrator'].include? current_role_name
+>>>>>>> master
     end
   end
 
@@ -42,4 +53,31 @@ class AnswerTagsController < ApplicationController
 
   # DELETE /answer_tags/1
   def destroy; end
+
+  # GET /answer_tags/machine_tagging?assignment_id=xx&response_id=xx
+  # When response_id is supplied, run the machine tagging on the corresponding response
+  # Otherwise, return a list of available responses ids
+  def machine_tagging
+    assignment = Assignment.find(params[:assignment_id])
+    if params[:response_id]
+      TagPromptDeployment.where(assignment_id: assignment.id).each do |tag_dep|
+        questions_ids = Question.where(questionnaire_id: tag_dep.questionnaire.id, type: tag_dep.question_type).map(&:id)
+        answers = Answer.where(question_id: questions_ids, response_id: params[:response_id])
+        ReviewMetricsQuery.cache_ws_results(answers, [tag_dep])
+      end
+      render json: {increment: 1}
+    else
+      rids = []
+      assignment.teams.each do |team|
+        if assignment.varying_rubrics_by_round?
+          (1..assignment.rounds_of_reviews).each do |round|
+            rids += ReviewResponseMap.get_responses_for_team_round(team, round).map(&:id)
+          end
+        else
+          rids += ResponseMap.get_assessments_for(team).map(&:id)
+        end
+      end
+      render json: rids
+    end
+  end
 end

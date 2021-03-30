@@ -44,9 +44,11 @@ class TagPromptDeployment < ActiveRecord::Base
         responses_ids = responses.map(&:id)
         answers = Answer.where(question_id: questions_ids, response_id: responses_ids)
         answers = answers.where("length(comments) > ?", self.answer_length_threshold.to_s) unless self.answer_length_threshold.nil?
-        answers_ids = answers.map(&:id)
+        answers_inferred_by_ml = answers.select {|answer| ReviewMetricsQuery.confident?(self.id, answer.id) }
+        taggable_answers = answers - answers_inferred_by_ml
         users = TeamsUser.where(team_id: team.id).map(&:user)
         users.each do |user|
+<<<<<<< HEAD
           tags = AnswerTag.where(tag_prompt_deployment_id: self.id, user_id: user.id, answer_id: answers_ids)
           tagged_answers_ids = tags.map(&:answer_id)
 
@@ -66,6 +68,12 @@ class TagPromptDeployment < ActiveRecord::Base
 
           # E2082 Adding tag_update_intervals as information that should be passed
           answer_tagging = VmUserAnswerTagging.new(user, percentage, tags.count, not_tagged_answers.count, answers.count, tag_update_intervals)
+=======
+          tags = AnswerTag.where(tag_prompt_deployment_id: self.id, user_id: user.id, answer_id: taggable_answers.map(&:id))
+          percentage = taggable_answers.count.zero? ? "-" : format("%.1f", tags.count.to_f / taggable_answers.count * 100)
+          not_tagged_answers = taggable_answers.reject {|a| tags.map(&:answer_id).include?(a.id) }
+          answer_tagging = VmUserAnswerTagging.new(user, answers.count, answers_inferred_by_ml.count, taggable_answers.count, tags.count, not_tagged_answers.count, percentage)
+>>>>>>> master
           user_answer_tagging.append(answer_tagging)
         end
       end
