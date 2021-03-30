@@ -4,13 +4,9 @@ class AdminController < ApplicationController
   def action_allowed?
     case params[:action]
     when 'list_instructors'
-<<<<<<< HEAD
       current_user_has_admin_privileges?
-=======
-      current_user.role.name['Administrator']
     when 'remove_instructor'
-      current_user.role.name['Administrator'] or current_user.role.name['Super-Administrator']
->>>>>>> master
+      current_user_has_admin_privileges?
     else
       current_user_has_super_admin_privileges?
     end
