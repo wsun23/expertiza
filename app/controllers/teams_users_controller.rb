@@ -32,8 +32,7 @@ class TeamsUsersController < ApplicationController
 
     team = Team.find(params[:id])
 
-<<<<<<< HEAD
-    if !user.nil?
+    unless user.nil?
       if team.is_a?(AssignmentTeam)
         assignment = Assignment.find(team.parent_id)
         if AssignmentParticipant.find_by(user_id: user.id, parent_id: assignment.id).nil?
@@ -42,7 +41,6 @@ class TeamsUsersController < ApplicationController
         else
           add_member_return = team.add_member(user, team.parent_id)
           flash[:error] = "This team already has the maximum number of members." if add_member_return == false
-  
           @teams_user = TeamsUser.last
           undo_link("The team user \"#{user.name}\" has been successfully added to \"#{team.name}\".")
         end
@@ -54,39 +52,11 @@ class TeamsUsersController < ApplicationController
         else
           add_member_return = team.add_member(user)
           flash[:error] = "This team already has the maximum number of members." if add_member_return == false
-  
           @teams_user = TeamsUser.last
           undo_link("The team user \"#{user.name}\" has been successfully added to \"#{team.name}\".")
         end
-=======
-    if team.is_a?(AssignmentTeam)
-      assignment = Assignment.find(team.parent_id)
-      #error was undefined column assignment_id in Participants
-      if AssignmentParticipant.find_by(user_id: user.id, parent_id: assignment.id).nil?
-        urlAssignmentParticipantList = url_for controller: 'participants', action: 'list', id: assignment.id, model: 'Assignment', authorization: 'participant'
-        flash[:error] = "\"#{user.name}\" is not a participant of the current assignment. Please <a href=\"#{urlAssignmentParticipantList}\">add</a> this user before continuing."
-      else
-        add_member_return = team.add_member(user, team.parent_id)
-        flash[:error] = "This team already has the maximum number of members." if add_member_return == false
-
-        @teams_user = TeamsUser.last
-        undo_link("The team user \"#{user.name}\" has been successfully added to \"#{team.name}\".")
-      end
-    else # CourseTeam
-      course = Course.find(team.parent_id)
-      if CourseParticipant.find_by(user_id: user.id, parent_id: course.id).nil?
-        urlCourseParticipantList = url_for controller: 'participants', action: 'list', id: course.id, model: 'Course', authorization: 'participant'
-        flash[:error] = "\"#{user.name}\" is not a participant of the current course. Please <a href=\"#{urlCourseParticipantList}\">add</a> this user before continuing."
-      else
-        add_member_return = team.add_member(user)
-        flash[:error] = "This team already has the maximum number of members." if add_member_return == false
-
-        @teams_user = TeamsUser.last
-        undo_link("The team user \"#{user.name}\" has been successfully added to \"#{team.name}\".")
->>>>>>> master
       end
     end
-    
     redirect_to controller: 'teams', action: 'list', id: team.parent_id
   end
 
@@ -104,7 +74,6 @@ class TeamsUsersController < ApplicationController
       team_user = TeamsUser.find(item_id).first
       team_user.destroy
     end
-
     redirect_to action: 'list', id: params[:id]
   end
 end

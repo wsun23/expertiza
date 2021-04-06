@@ -67,7 +67,6 @@ class PopupController < ApplicationController
         instance_variable_set('@total_possible_round_' + round.to_s, response.maximum_score)
       end
     end
-<<<<<<< HEAD
 
     all_assignments = Assignment.where(:instructor_id=>session[:user].id)
     @similar_assignments = []
@@ -79,11 +78,7 @@ class PopupController < ApplicationController
     @similar_assignments = @similar_assignments.sort_by { |sim_assignment| -sim_assignment.id }
   end
 
-  # Views tone analysis report and heatmap
-=======
-  end
 
->>>>>>> master
   def view_review_scores_popup
     @reviewer_id = params[:reviewer_id]
     @assignment_id = params[:assignment_id]

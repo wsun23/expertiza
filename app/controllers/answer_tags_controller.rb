@@ -7,18 +7,9 @@ class AnswerTagsController < ApplicationController
   def action_allowed?
     case params[:action]
     when 'index', 'create_edit'
-<<<<<<< HEAD
       current_user_has_student_privileges?
-=======
-      ['Instructor',
-       'Teaching Assistant',
-       'Student',
-       'Administrator'].include? current_role_name
     when 'machine_tagging'
-      ['Instructor',
-       'Teaching Assistant',
-       'Administrator'].include? current_role_name
->>>>>>> master
+      current_user_has_instructor_privileges?
     end
   end
 

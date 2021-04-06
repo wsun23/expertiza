@@ -29,9 +29,6 @@ class StudentTaskController < ApplicationController
         ta_course_ids = TaMapping.where(:ta_id => session[:original_user].id).pluck(:course_id)
         @student_tasks = @student_tasks.select {|t| ta_course_ids.include?t.assignment.course_id }
       else
-<<<<<<< HEAD
-        @student_tasks = @student_tasks.select {|t| t.assignment.course and session[:original_user].id == t.assignment.course.instructor_id or !t.assignment.course and session[:original_user].id == t.assignment.instructor_id }
-=======
         # Changed logic to adapt to free standing assignments with the same course ID
         @student_tasks = @student_tasks.select do |t|
           session[:original_user].id == if t.assignment.course.nil?
@@ -40,7 +37,6 @@ class StudentTaskController < ApplicationController
                                           t.assignment.course.instructor_id
                                         end
         end
->>>>>>> master
       end
     end
 

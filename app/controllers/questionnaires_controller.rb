@@ -13,17 +13,9 @@ class QuestionnairesController < ApplicationController
     case params[:action]
     when 'edit'
       @questionnaire = Questionnaire.find(params[:id])
-<<<<<<< HEAD
       current_user_has_admin_privileges? ||
           (current_user_is_a?('Instructor') && current_user_id?(@questionnaire.try(:instructor_id))) ||
           (current_user_is_a?('Teaching Assistant') && session[:user].instructor_id == @questionnaire.try(:instructor_id))
-=======
-      (['Super-Administrator',
-        'Administrator'].include? current_role_name) ||
-          ((['Instructor'].include? current_role_name) && current_user_id?(@questionnaire.try(:instructor_id))) ||
-          ((['Teaching Assistant'].include? current_role_name) && Ta.get_my_instructors(session[:user].id).include?(@questionnaire.try(:instructor_id)))
-
->>>>>>> master
     else
       current_user_has_student_privileges?
     end
@@ -83,25 +75,22 @@ class QuestionnairesController < ApplicationController
         @questionnaire.type = params[:questionnaire][:type]
         # Zhewei: Right now, the display_type in 'questionnaires' table and name in 'tree_folders' table are not consistent.
         # In the future, we need to write migration files to make them consistency.
-<<<<<<< HEAD
+
         # E1903 : We are not sure of other type of cases, so have added a if statement. If there are only 5 cases, remove the if statement
-        if %w[AuthorFeedback CourseSurvey TeammateReview GlobalSurvey AssignmentSurvey BookmarkRating].include?(display_type)
-          display_type = (display_type.split /(?=[A-Z])/).join("%")
-=======
+        display_type = (display_type.split /(?=[A-Z])/).join("%")
         case display_type
-        when 'AuthorFeedback'
-          display_type = 'Author%Feedback'
-        when 'CourseSurvey'
-          display_type = 'Course%Survey'
-        when 'TeammateReview'
-          display_type = 'Teammate%Review'
-        when 'GlobalSurvey'
-          display_type = 'Global%Survey'
-        when 'AssignmentSurvey'
-          display_type = 'Assignment%Survey'
-        when 'BookmarkRating'
-          display_type = 'Bookmark Rating'
->>>>>>> master
+          when 'AuthorFeedback'
+            display_type = 'Author%Feedback'
+          when 'CourseSurvey'
+            display_type = 'Course%Survey'
+          when 'TeammateReview'
+            display_type = 'Teammate%Review'
+          when 'GlobalSurvey'
+            display_type = 'Global%Survey'
+          when 'AssignmentSurvey'
+            display_type = 'Assignment%Survey'
+          when 'BookmarkRating'
+            display_type = 'Bookmark Rating'
         end
         @questionnaire.display_type = display_type
         @questionnaire.instruction_loc = Questionnaire::DEFAULT_QUESTIONNAIRE_URL
@@ -111,9 +100,9 @@ class QuestionnairesController < ApplicationController
         parent = FolderNode.find_by(node_object_id: tree_folder.id)
         QuestionnaireNode.create(parent_id: parent.id, node_object_id: @questionnaire.id, type: 'QuestionnaireNode')
         flash[:success] = 'You have successfully created a questionnaire!'
-      rescue StandardError
-        flash[:error] = $ERROR_INFO
-      end
+    rescue StandardError
+      flash[:error] = $ERROR_INFO
+    end
       redirect_to controller: 'questionnaires', action: 'edit', id: @questionnaire.id
     end
   end
