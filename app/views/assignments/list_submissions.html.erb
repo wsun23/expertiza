@@ -48,10 +48,9 @@
         <!--Team name-->
         <% team_name_color = get_team_name_color_in_list_submission(team) %>
         <% if @assignment.max_team_size > 1 %>
-<<<<<<< HEAD
           <% team_name_color = get_team_name_color_in_list_submission(team) %>
           <td><p style = <%="color:#{team_name_color}"%>><%= team.name(session[:ip]) %></p>
-          <% unless participants.empty? %>
+          <% unless participants.empty? or get_data_for_list_submissions %>
             <!-- “Assign Grade” will show if the final deadline of this assignment pass -->
             <% if @assignment.get_current_stage() == "Finished" %>
               <%= link_to 'Assign Grade', { controller: 'grades', action: 'view_team', id: participants.first.id}, target: '_blank' %></td>
@@ -59,11 +58,6 @@
             <%elsif current_user_is_assignment_participant?(@assignment.id) %>
               <%= render :partial => 'responses', :locals => {:team => team ,:topic_id => topic_identifier, :title => 'Review'} %>
             <% end %>
-=======
-          <td><p style = <%="color:#{team_name_color}"%>><%= team.name %></p>
-          <% unless participants.empty? or participants[0].nil?%>
-            <%= link_to 'Assign Grade', { controller: 'grades', action: 'view_team', id: participants.first.id}, target: '_blank' %></td>
->>>>>>> master
           <% end %>
         <% end %>
 
