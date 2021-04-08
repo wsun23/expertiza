@@ -47,12 +47,15 @@ class ResponseMap < ActiveRecord::Base
 
   # return latest versions of the response given by reviewer
   def self.get_reviewer_assessments_for(team, reviewer)
-<<<<<<< HEAD
+    # Merge Conflict
+    # Beta branch code
     # get_reviewer may return an AssignmentParticipant or an AssignmentTeam
+    # Not sure about which method call to keep
     map = where(reviewee_id: team.id, reviewer_id: reviewer.get_reviewer.id)
-=======
-    map = where(reviewee_id: team.id, reviewer_id: reviewer.id)
->>>>>>> master
+
+    # On master branch
+    # map = where(reviewee_id: team.id, reviewer_id: reviewer.id)
+
     Response.where(map_id: map).sort {|m1, m2| self.comparator(m1, m2) }[0]
   end
 

@@ -26,7 +26,6 @@ class QuizResponseMap < ResponseMap
     questionnaire_id = self.reviewed_object_id  # the reviewed id is questionnaire id in response map table
     response_id = self.response.first.id rescue nil
 
-<<<<<<< HEAD
     # quiz not taken yet
     return "N/A" if response_id.nil?
 
@@ -46,18 +45,10 @@ class QuizResponseMap < ResponseMap
 
     if calculated_score.nil? or calculated_score[0].nil? or calculated_score[0].graded_percent.nil?
       return "N/A"
-=======
-    return 'N/A' if response_id.nil? # this quiz has not been taken yet
-
-    questions.each do |question|
-      score = Answer.find_by(response_id: response_id, question_id: question.id)
-      return 'N/A' if score.nil?
-      quiz_score += score.answer
->>>>>>> master
     end
 
     # convert the obtained percentage to float and round it to 1st precision
     weighted_quiz_score = calculated_score[0].graded_percent.to_f.round(1)
-    return weighted_quiz_score
+    weighted_quiz_score
   end
 end
