@@ -50,7 +50,7 @@
         <% if @assignment.max_team_size > 1 %>
           <% team_name_color = get_team_name_color_in_list_submission(team) %>
           <td><p style = <%="color:#{team_name_color}"%>><%= team.name(session[:ip]) %></p>
-          <% unless participants.empty? or get_data_for_list_submissions %>
+          <% unless participants.empty? or participants[0].nil? %>
             <!-- “Assign Grade” will show if the final deadline of this assignment pass -->
             <% if @assignment.get_current_stage() == "Finished" %>
               <%= link_to 'Assign Grade', { controller: 'grades', action: 'view_team', id: participants.first.id}, target: '_blank' %></td>
