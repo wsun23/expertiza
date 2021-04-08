@@ -41,13 +41,10 @@
 <%else %>
   <h4> There are no reviews for this assignment</h4>
 <%end %>
-<<<<<<< HEAD
+
 <!--Toggle submission-->
-<button onclick="toggleFunction('<%= @participant.id.to_s%>')" class="btn btn-default">Show Submission</button>
-=======
-  <!--Toggle submission-->
 <button onclick="toggleFunction('<%= @participant.id.to_s%>',null)" class="btn btn-default">Show Submission</button>
->>>>>>> master
+
 <div id="<%= @participant.id.to_s%>" style="display:none;">
 <% if @participant.team.hyperlinks.try(:length) %>
   <%= render :partial => 'submitted_content/hyperlink', :locals => {participant: @participant, stage: @stage} %>
