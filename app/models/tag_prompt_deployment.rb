@@ -48,9 +48,7 @@ class TagPromptDeployment < ActiveRecord::Base
         taggable_answers = answers - answers_inferred_by_ml
         users = TeamsUser.where(team_id: team.id).map(&:user)
         users.each do |user|
-<<<<<<< HEAD
           tags = AnswerTag.where(tag_prompt_deployment_id: self.id, user_id: user.id, answer_id: answers_ids)
-          tagged_answers_ids = tags.map(&:answer_id)
 
           # E2082 Track_Time_Between_Successive_Tag_Assignments
           # Extract time where each tag is generated / modified
@@ -62,18 +60,11 @@ class TagPromptDeployment < ActiveRecord::Base
           for i in 1..(number_of_updated_time -1) do
             tag_update_intervals.append(tag_updated_times[i] - tag_updated_times[i-1])
           end
-
-          percentage = answers.count == 0 ? "-" : format("%.1f", tags.count.to_f / answers.count * 100)
-          not_tagged_answers = answers.where.not(id: tagged_answers_ids)
-
           # E2082 Adding tag_update_intervals as information that should be passed
-          answer_tagging = VmUserAnswerTagging.new(user, percentage, tags.count, not_tagged_answers.count, answers.count, tag_update_intervals)
-=======
           tags = AnswerTag.where(tag_prompt_deployment_id: self.id, user_id: user.id, answer_id: taggable_answers.map(&:id))
           percentage = taggable_answers.count.zero? ? "-" : format("%.1f", tags.count.to_f / taggable_answers.count * 100)
           not_tagged_answers = taggable_answers.reject {|a| tags.map(&:answer_id).include?(a.id) }
           answer_tagging = VmUserAnswerTagging.new(user, answers.count, answers_inferred_by_ml.count, taggable_answers.count, tags.count, not_tagged_answers.count, percentage)
->>>>>>> master
           user_answer_tagging.append(answer_tagging)
         end
       end
