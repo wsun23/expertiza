@@ -11,8 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-
 ActiveRecord::Schema.define(version: 20201125202200) do
 
 
@@ -27,9 +25,6 @@ ActiveRecord::Schema.define(version: 20201125202200) do
     t.datetime "updated_at",                      null: false
     t.text     "self_introduction", limit: 65535
   end
-=======
-ActiveRecord::Schema.define(version: 20201116005244) do
->>>>>>> master
 
   create_table "answer_tags", force: :cascade do |t|
     t.integer  "answer_id",                limit: 4
@@ -132,14 +127,11 @@ ActiveRecord::Schema.define(version: 20201116005244) do
     t.boolean  "is_answer_tagging_allowed"
     t.boolean  "has_badge"
     t.boolean  "allow_selecting_additional_reviews_after_1st_round"
-<<<<<<< HEAD
     t.boolean  "vary_by_topic",                                                    default: false
     t.boolean  "vary_by_round",                                                    default: false
     t.boolean  "reviewer_is_team"
     t.boolean  "is_conference_assignment",                                         default: false
-=======
     t.integer  "sample_assignment_id",                               limit: 4
->>>>>>> master
   end
 
   add_index "assignments", ["course_id"], name: "fk_assignments_courses", using: :btree

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
--<h2>Reviews for "<%= @assignment.name %>"</h2>
-
-=======
 <h2>Reviews for "<%= @assignment.name %>"</h2>
 <br>
->>>>>>> master
 <!-- Added the feature to find the reviews and meta-reviews left for students by E1839 @Rayan Dasoriya -->
 <% if @assignment.num_reviews_allowed.nil? || @assignment.num_reviews_allowed == -1%>
     <h4>Your instructor expects you to do <%= @assignment.num_reviews_required %> reviews. You are not allowed to do any extra reviews. </h4>

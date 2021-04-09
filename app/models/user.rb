@@ -36,6 +36,9 @@ class User < ActiveRecord::Base
   scope :tas, -> { where role_id: Role.ta }
   scope :students, -> { where role_id: Role.student }
 
+  attr_accessible :password
+  attr_accessor :password
+
   has_paper_trail
 
   def salt_first?

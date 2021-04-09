@@ -61,9 +61,11 @@
   <%if @topics.size > 0 %>
     <% if @authorization == 'participant' || @authorization == 'submitter' %>
       <li>
-<<<<<<< HEAD
-        <%= link_to 'Signup sheet', :controller=>'sign_up_sheet', :action => 'list', :id => @participant.id%>
-        (Sign up for a topic)
+        <%= link_to 'Signup sheet', :controller=>'sign_up_sheet', :action => 'list', :id => @participant.id, :onclick => 'putOverlay()'%>
+        (Sign up for a topic)  &nbsp
+        <%if @can_provide_suggestions == true %>
+          <%= link_to "Suggest a topic",{:controller => 'suggestion', :action => 'new', :id => @assignment.id}, :onclick => 'putOverlay()' %>
+        <% end %>
       </li>
       <!--Show bookmarks if they are allowed for this assignment-->
       <% if @use_bookmark %>
@@ -77,17 +79,6 @@
       <% end %>
     <% end %>
   <%end%>
-=======
-        <%= link_to 'Signup sheet', :controller=>'sign_up_sheet', :action => 'list', :id => @participant.id, :onclick => 'putOverlay()'%>
-        (Sign up for a topic)  &nbsp
-      <%end%>
-  <%end%>
-      <%if @can_provide_suggestions == true %>
-          <%= link_to "Suggest a topic",{:controller => 'suggestion', :action => 'new', :id => @assignment.id}, :onclick => 'putOverlay()' %>
-        <% end %>
-      </li>
-
->>>>>>> master
 
 <!--ACS Here we need to know the size of the team to decide whether or not
 to display the label "Your team" in the student assignment tasks-->
@@ -130,15 +121,10 @@ to display the label "Your team" in the student assignment tasks-->
       <% end %>
       <!--Zhewei: professor mentioned that a submission is reviewable if the submission is in a stage where reviews can be done. It does not depend on the stage of the topic the reviewer is writing on-->
       <!--Akshay: Fix Issue 1218 - this link is disabled if assignment does not require any peer reviews-->
-<<<<<<< HEAD
       <%if @can_review==false and @assignment.is_conference_assignment%>
         <font color="gray"><%= @alias_name%></font>
       <% elsif review_deadline?(@assignment) and (check_reviewable_topics(@assignment) or @assignment.metareview_allowed(nil) or @assignment.get_current_stage(@topic_id) == "Finished") %>
-        <%= link_to "#{@alias_name}",{:controller => 'student_review', :action => 'list', :id => @participant.id} %>
-=======
-      <% if review_deadline?(@assignment) and  (check_reviewable_topics(@assignment) or @assignment.metareview_allowed(nil) or @assignment.get_current_stage(@topic_id) == "Finished") %>
-        <%= link_to "#{@alias_name}",{:controller => 'student_review', :action => 'list', :id => @participant.id}, :onclick => 'putOverlay()' %>
->>>>>>> master
+        <%= link_to "#{@alias_name}",{:controller => 'student_review', :action => 'list', :id => @participant.id, :onclick => 'putOverlay()'} %>
       <% else %>
         <font color="gray"><%= @alias_name%></font>
       <% end %>
