@@ -113,11 +113,22 @@ class Assessment360Controller < ApplicationController
         next if peer_review_score[:review][:scores].nil? #Skip if there are no reviews scores assigned by peer
         next if peer_review_score[:review][:scores][:avg].nil? #Skip if there are is no peer review average score
         @peer_review_scores[cp.id][assignment_id] = peer_review_score[:review][:scores][:avg].round(2)
+
+        # Logic from master branch
+        #   # Set the assignment grade, peer review score, and sum for the final student summary
+        #   @assignment_grades[cp.id][assignment_id] = team[:grade_for_submission]
+        #   unless @assignment_grades[cp.id][assignment_id].nil?
+        #     @final_grades[cp.id] += @assignment_grades[cp.id][assignment_id]
+        #   end
+        #   # peer_review_score hash won't have the key :review if the assignment doesn't have a review rubric assigned to it
+        #   unless peer_review_score.nil? || !peer_review_score.key?('review') || peer_review_score[:review][:scores][:avg].nil?
+        #     @peer_review_scores[cp.id][assignment_id] = peer_review_score[:review][:scores][:avg].round(2)
+        #   end
+        # end
       end
     end
   end
 
-<<<<<<< HEAD
   def assignment_grade_summary(cp, assignment_id)
     user_id = cp.user_id
     # topic exists if a team signed up for a topic, which can be found via the user and the assignment
@@ -135,20 +146,9 @@ class Assessment360Controller < ApplicationController
     if course_participants.empty?
       flash[:error] = "There is no course participant in course #{course.name}"
       redirect_to(:back)
-=======
-        # Set the assignment grade, peer review score, and sum for the final student summary
-        @assignment_grades[cp.id][assignment_id] = team[:grade_for_submission]
-        unless @assignment_grades[cp.id][assignment_id].nil?
-          @final_grades[cp.id] += @assignment_grades[cp.id][assignment_id]
-        end
-        # peer_review_score hash won't have the key :review if the assignment doesn't have a review rubric assigned to it
-        unless peer_review_score.nil? || !peer_review_score.key?('review') || peer_review_score[:review][:scores][:avg].nil?
-          @peer_review_scores[cp.id][assignment_id] = peer_review_score[:review][:scores][:avg].round(2)
-        end
-      end
->>>>>>> master
     end
   end
+
 
   # The function populates the hash value for all students for all the reviews that they have gotten.
   # I.e., Teammate and Meta for each of the assignments that they have taken

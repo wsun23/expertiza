@@ -118,27 +118,27 @@ class UsersController < ApplicationController
     # if the user name already exists, register the user by email address
     check = User.find_by(name: params[:user][:name])
     params[:user][:name] = params[:user][:email] unless check.nil?
-<<<<<<< HEAD
     is_user=true
     # Assign all user params for creating user using assign_user_params function
     @user=assign_user_params(is_user)
-=======
-    @user = User.new(user_params)
-    if params[:user][:institution_id].blank?
-      begin
-        params[:user][:institution_id] = (Institution.create(name: params[:institution][:name])).id
-      rescue StandardError
-        flash[:error] = "Institution with same name already exists"
-        redirect_to action: 'new', role: 'Student'
-      end
-      # params[:user][:institution_id] = params[:user][:institution_id]
-    end
-    @user.institution_id = params[:user][:institution_id]
-    # record the person who created this new user
-    @user.parent_id = session[:user].id
-    # set the user's timezone to its parent's
-    @user.timezonepref = User.find(@user.parent_id).timezonepref
->>>>>>> master
+
+    # Refer following Master branch logic if above method fails
+    # @user = User.new(user_params)
+    # if params[:user][:institution_id].blank?
+    #   begin
+    #     params[:user][:institution_id] = (Institution.create(name: params[:institution][:name])).id
+    #   rescue StandardError
+    #     flash[:error] = "Institution with same name already exists"
+    #     redirect_to action: 'new', role: 'Student'
+    #   end
+    #   # params[:user][:institution_id] = params[:user][:institution_id]
+    # end
+    # @user.institution_id = params[:user][:institution_id]
+    # # record the person who created this new user
+    # @user.parent_id = session[:user].id
+    # # set the user's timezone to its parent's
+    # @user.timezonepref = User.find(@user.parent_id).timezonepref
+
     if @user.save
       password = @user.reset_password # the password is reset
       prepared_mail = MailerHelper.send_mail_to_user(@user, "Your Expertiza account and password have been created.", "user_welcome", password)

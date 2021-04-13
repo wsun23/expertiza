@@ -240,7 +240,6 @@ window.addEventListener('load', (e) => {
 })
 
 jQuery(document).ready(function() {
-<<<<<<< HEAD
   // This preloadedImages function is refered from http://jsfiddle.net/slashingweapon/8jAeu/
   // Actually I am not using the values in preloadedImages, but image loading speed is indeed getting faster
   let treeDisplayDiv = document.querySelector('#tree_display');
@@ -248,26 +247,15 @@ jQuery(document).ready(function() {
   if (treeDisplayDiv) {
     // set the user preference to homeActionshowflag 
     app_variables.homeActionShowFlag = treeDisplayDiv.dataset.userShow;
-    
   }
   var preloadedImages = []
   function preloadImages() {
-    for (var idx = 0; idx < arguments.length; idx++) {
-      var oneImage = new Image()
-      oneImage.src = arguments[idx]
-      preloadedImages.push(oneImage)
-=======
-    // This preloadedImages function is refered from http://jsfiddle.net/slashingweapon/8jAeu/
-    // Actually I am not using the values in preloadedImages, but image loading speed is indeed getting faster
-    var preloadedImages = []
-    function preloadImages() {
-        for (var idx = 0; idx < arguments.length; idx++) {
-            var oneImage = new Image()
-            oneImage.src = arguments[idx];
-            preloadedImages.push(oneImage);
-        }
->>>>>>> master
-    }
+      for (var idx = 0; idx < arguments.length; idx++) {
+          var oneImage = new Image()
+          oneImage.src = arguments[idx]
+          preloadedImages.push(oneImage)
+      }
+  }
 
 <<<<<<< HEAD
   function formatDate(date) {
