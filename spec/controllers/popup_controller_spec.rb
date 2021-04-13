@@ -33,13 +33,9 @@ describe PopupController do
       session = {user: instructor}
       result = get :team_users_popup, params, session
       expect(result.status).to eq 200
-
-<<<<<<< HEAD
     end
   end
 
-=======
->>>>>>> master
   ######### Tone Analysis Tests ##########
   describe "tone analysis tests" do
     before(:each) do
