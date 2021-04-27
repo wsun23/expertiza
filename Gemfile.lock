@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/mimemagicrb/mimemagic.git
+  revision: 01f92d86d15d85cfd0f20dabd025dcbd36a8a60f
+  ref: 01f92d86d15d85cfd0f20dabd025dcbd36a8a60f
+  specs:
+    mimemagic (0.3.5)
+
+GIT
   remote: https://github.com/Winbobob/danger.git
   revision: 1ccfed23f809a1e5c46e2533cfd7a3138f6cd821
   ref: 1ccfed23f809a1e5c46e2533cfd7a3138f6cd821
@@ -276,9 +283,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
     mime-types (2.99.3)
-    mimemagic (0.3.10)
-      nokogiri (~> 1)
-      rake
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -630,7 +634,7 @@ DEPENDENCIES
   json
   launchy
   lingua
-  mimemagic (= 0.3.10)
+  mimemagic!
   momentjs-rails (>= 2.9.0)
   mutant-rspec
   mysql2
