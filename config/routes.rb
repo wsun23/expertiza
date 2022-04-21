@@ -1,4 +1,8 @@
 Expertiza::Application.routes.draw do
+  resources :revision_plan_team_maps
+  resources :revision_plan_team_maps
+  resources :revision_plan_team_maps
+  resources :revision_plan_team_maps
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
@@ -270,6 +274,12 @@ Expertiza::Application.routes.draw do
   resources :global_survey_questionnaires, controller: :questionnaires
   resources :course_survey_questionnaires, controller: :questionnaires
   resources :bookmark_rating_questionnaires, controller: :questionnaires
+  resources :revision_plan_questionnaires, controller: :revision_plan_questionnaires, only: %i[new edit update] do
+    collection do
+      post :add_new_questions
+      post :save_all_questions
+    end
+  end
 
   resources :questions do
     collection do
