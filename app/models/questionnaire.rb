@@ -29,7 +29,8 @@ class Questionnaire < ApplicationRecord
                          'CourseSurveyQuestionnaire',
                          'Bookmark RatingQuestionnaire',
                          'BookmarkRatingQuestionnaire',
-                         'QuizQuestionnaire'].freeze
+                         'QuizQuestionnaire',
+                         'RevisionPlanQuestionnaire'].freeze
   has_paper_trail
 
   def get_weighted_score(assignment, scores)
@@ -41,6 +42,16 @@ class Questionnaire < ApplicationRecord
                              (symbol.to_s + round.to_s).to_sym
                            end
     compute_weighted_score(questionnaire_symbol, assignment, scores)
+  end
+  
+  # Display questionnaire heading in response view
+  def display_heading?
+    return false
+  end
+
+  # Return true if user owns questionnaire
+  def owner?(user_id)
+    instructor_id == user_id
   end
 
   def compute_weighted_score(symbol, assignment, scores)
