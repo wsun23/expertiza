@@ -525,6 +525,17 @@ ActiveRecord::Schema.define(version: 20220111023859) do
     t.index ["review_grade_id"], name: "fk_rails_0a539bcc81"
   end
 
+  create_table "revision_plan_team_maps", force: :cascade do |t|
+    t.integer  "team_id",          limit: 4
+    t.integer  "questionnaire_id", limit: 4
+    t.integer  "used_in_round",    limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "revision_plan_team_maps", ["questionnaire_id"], name: "index_revision_plan_team_maps_on_questionnaire_id", using: :btree
+  add_index "revision_plan_team_maps", ["team_id"], name: "index_revision_plan_team_maps_on_team_id", using: :btree
+
   create_table "review_grades", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "participant_id"
     t.integer "grade_for_reviewer"
