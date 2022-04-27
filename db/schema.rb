@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220425090237) do
+ActiveRecord::Schema.define(version: 20220424063124) do
 
   create_table "account_requests", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "name"
@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(version: 20220425090237) do
     t.boolean "auto_assign_mentor", default: false
     t.boolean "duty_based_assignment?"
     t.boolean "questionnaire_varies_by_duty"
-    t.boolean "is_revision_planning_enabled", default: false
+    t.boolean "is_revision_planning_enabled"
     t.index ["course_id"], name: "fk_assignments_courses"
     t.index ["instructor_id"], name: "fk_assignments_instructors"
     t.index ["late_policy_id"], name: "fk_late_policy_id"

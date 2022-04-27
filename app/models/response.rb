@@ -249,6 +249,27 @@ class Response < ApplicationRecord
     Class.new.extend(Scoring).assessment_score(params)
   end
 
+  # Get all the questionnaires for a response, response is a collection of answers
+  # answers contain reference to their question, and question have a reference to questionnaire
+
+  def questionnaires_by_answers(answers)
+    answers_with_questionnaires = answers.select { |answer| answer && answer.question && answer.question.questionnaire }
+    questionnaires = answers_with_questionnaires.collect { |answer| answer.question.questionnaire }.uniq
+    unless (questionnaires.any?)
+      questionnaires = []
+      questionnaires << questionnaire_by_answer(answers.first)
+    end
+    questionnaires
+  end
+
+  # Get all questions for this response
+  def get_questions
+    @review_questions = []
+    questionnaires = questionnaires_by_answers(scores)
+    questionnaires.each { |questionnaire| @review_questions += questionnaire.questions.sort_by(&:seq) }
+    return @review_questions
+  end
+
   private
 
   def construct_instructor_html(identifier, self_id, count)
@@ -271,23 +292,42 @@ class Response < ApplicationRecord
   end
 
   def construct_review_response(code, self_id, show_tags = nil, current_user = nil)
-    code += '<table id="review_' + self_id + '" class="table table-bordered">'
+    review_questions = []
+    revision_plan_questions = []
+    code += "<h5>Review Responses</h5>" + '<table id="review_' + self_id + '" class="table table-bordered">'
     answers = Answer.where(response_id: response_id)
     unless answers.empty?
       questionnaire = questionnaire_by_answer(answers.first)
       questionnaire_max = questionnaire.max_question_score
-      questions = questionnaire.questions.sort_by(&:seq)
+      questions = get_questions
       # get the tag settings this questionnaire
       tag_prompt_deployments = show_tags ? TagPromptDeployment.where(questionnaire_id: questionnaire.id, assignment_id: map.assignment.id) : nil
-      code = add_table_rows questionnaire_max, questions, answers, code, tag_prompt_deployments, current_user
+      map = ResponseMap.find(self.map_id)
+      unless map.is_a? ReviewResponseMap
+        code = add_table_rows questionnaire_max, questions, answers, code, tag_prompt_deployments, current_user
+      else
+        assignment = map.assignment
+        questions.each do |question|
+          if (question.questionnaire.type == 'ReviewQuestionnaire')
+            review_questions.append(question)
+          elsif (question.questionnaire.type == 'RevisionPlanQuestionnaire')
+            revision_plan_questions.append(question)
+          end
+        end
+        code = add_table_rows questionnaire_max, review_questions, answers, code, tag_prompt_deployments, current_user
+        if assignment.is_revision_planning_enabled && revision_plan_questions.any?
+          code += '</table>' + "<h5>Revision Plan Responses</h5>"
+          code += '<table id="review_' + self_id + '" class="table table-bordered">'
+          code = add_table_rows questionnaire_max, revision_plan_questions, answers, code, tag_prompt_deployments, current_user
+        end
+      end
     end
-    comment = if additional_comment.nil?
-                ''
-              else
-                additional_comment.gsub('^p', '').gsub(/\n/, '<BR/>')
-              end
-    code += '<tr><td><b>Additional Comment: </b>' + comment + '</td></tr>'
-    code += '</table>'
+    if additional_comment.nil?
+      comment = ''
+    else
+      comment = additional_comment.gsub('^p', '').gsub(/\n/, '<BR/>')
+    end
+    code += '</table>' + "<h5>Additional Comment</h5>" + '<table id="review_' + self_id + '" class="table table-bordered">' + '<tr><td>' + comment + '</td></tr>' + '</table>'
     code
   end
 
